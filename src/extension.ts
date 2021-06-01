@@ -58,7 +58,47 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	let disposable2 = vscode.commands.registerCommand('sqlformatter.unFormatSQL', async() => {
+		let editor = vscode.window.activeTextEditor;
+		if (!editor) {
+			console.log('No text editor open. Aborting.');
+			return; // No open text editor
+		}
+
+		const document = editor.document
+		const selection = editor.selection
+		const word = document.getText(selection)
+
+		let text = word.replace(/"/g, '')
+		text = text.replace(/\+/g, '')
+		text = text.replace('query = ', '')
+		let result = ''
+
+		text.split("\n").forEach((str) => {
+			result += str.trim() + "\n"
+		})
+
+        await copyToClipboard(result)
+
+	})
+
+	context.subscriptions.push(disposable2);
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() { }
+
+async function copyToClipboard(text: string) {
+    // do not copy empty text
+    if (text.trim() === '') {
+        return;
+    }
+
+    // copy
+    try {
+        await vscode.env.clipboard.writeText(text);
+    } catch (error) {
+        vscode.window.showErrorMessage(`copy-on-select failed. Error: ${JSON.stringify(error)}`);
+    }
+}

@@ -11,14 +11,20 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:sqlformatter.formatSQL"
+        "onCommand:sqlformatter.formatSQL",
+        "onCommand:sqlformatter.unFormatSQL"
     ],
     "main": "./out/extension.js",
     "contributes": {
         "commands": [{
-            "command": "sqlformatter.formatSQL",
-            "title": "Format SQL for RSL"
-        }]
+                "command": "sqlformatter.formatSQL",
+                "title": "Format SQL for RSL"
+            },
+            {
+                "command": "sqlformatter.unFormatSQL",
+                "title": "Remove formatting for developer"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
