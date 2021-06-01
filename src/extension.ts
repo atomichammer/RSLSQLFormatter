@@ -43,6 +43,10 @@ export function activate(context: vscode.ExtensionContext) {
 				res = res + '"' + (str2).trimEnd() + ' " +\n'
 				return
 			}
+			else if (idx == strArr.length - 1){
+				res = res + '        "' + (str2).trimEnd() + ' ";'
+				return
+			}
 			res = res + '        "' + (str2).trimEnd() + ' " +\n'
 		})
 
