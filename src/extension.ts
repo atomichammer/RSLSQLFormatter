@@ -30,27 +30,41 @@ export function activate(context: vscode.ExtensionContext) {
 		const selection = editor.selection
 		const word = document.getText(selection)
 
+		const config = vscode.workspace.getConfiguration('sqlformatter');
+		const varName = config.get('varName')
+		const alignRight = config.get('alignRightQuotes')
+
 		const str = word.trim()
 		if (!str.length) { return word }
 		const strArr = str.split("\n")
 
-		let res = ''
+		let res = varName + ' = '
+		const indentation = ' '.repeat(res.length)
 
+		let rightIndentationLength = 0
+
+		if(alignRight)
+		{
+			strArr.forEach((str2) => {
+				if (str2.length > rightIndentationLength)
+				{
+					rightIndentationLength = str2.length
+				}
+			})
+		}
 
 		strArr.forEach((str2, idx) => {
 			if(idx == 0)
 			{
-				res = res + '"' + (str2).trimEnd() + ' " +\n'
+				res = res + '"' + (str2).trimEnd().padEnd(rightIndentationLength, ' ') + ' " +\n'
 				return
 			}
 			else if (idx == strArr.length - 1){
-				res = res + '        "' + (str2).trimEnd() + ' ";'
+				res = res + indentation + '"' + (str2).trimEnd().padEnd(rightIndentationLength, ' ') +' ";'
 				return
 			}
-			res = res + '        "' + (str2).trimEnd() + ' " +\n'
+			res = res + indentation + '"' + (str2).trimEnd().padEnd(rightIndentationLength, ' ') +' " +\n'
 		})
-
-		res = 'query = ' + res
 
 		editor.edit(builder => {
 			builder.replace(selection, res)
@@ -70,9 +84,13 @@ export function activate(context: vscode.ExtensionContext) {
 		const selection = editor.selection
 		const word = document.getText(selection)
 
+		const config = vscode.workspace.getConfiguration('sqlformatter');
+		const varName = config.get('varName')
+		const alignRight = config.get('alignRightQuotes')
+
 		let text = word.replace(/"/g, '')
 		text = text.replace(/\+/g, '')
-		text = text.replace('query = ', '')
+		text = text.replace(varName + ' = ', '')
 		let result = ''
 
 		text.split("\n").forEach((str) => {

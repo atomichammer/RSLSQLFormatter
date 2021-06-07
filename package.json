@@ -16,11 +16,39 @@
     ],
     "main": "./out/extension.js",
     "contributes": {
+        "keybindings": [{
+                "command": "sqlformatter.unFormatSQL",
+                "key": "ctrl+shift+c",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "sqlformatter.formatSQL",
+                "key": "ctrl+shift+v",
+                "when": "editorTextFocus"
+            }
+        ],
+        "configuration": {
+            "title": "SQLFormatter",
+            "properties": {
+                "sqlformatter.varName": {
+                    "type": "string",
+                    "default": "query",
+                    "description": "Name for the query variable."
+                },
+                "sqlformatter.alignRightQuotes": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether to align right quotes."
+                }
+            }
+        },
         "commands": [{
+                "key": "ctrl+shift+v",
                 "command": "sqlformatter.formatSQL",
                 "title": "Format SQL for RSL"
             },
             {
+                "key": "ctrl+shift+c",
                 "command": "sqlformatter.unFormatSQL",
                 "title": "Remove formatting for developer"
             }
