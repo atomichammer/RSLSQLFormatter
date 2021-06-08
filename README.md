@@ -8,3 +8,5 @@ This thingy formats SQL for RSL prepending it with variable and adding quotes.
 ## Settings
 - **sqlformatter.varName** - name of the prepending variable
 - **sqlformatter.alignRightQuotes** - Whether to align right quotes
+
+![Formatting example](images/format.gif)
